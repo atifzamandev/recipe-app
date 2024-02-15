@@ -87,7 +87,7 @@ const RecipeCard: React.FC<RecipeProps> = ({ hits }) => {
               </CardContent>
               <CardActions disableSpacing>
                 <Button variant='contained' color='error' sx={{ margin: '0 auto', display: 'flex' }} onClick={() => handleOpenModal(index)}>
-                  Chek More
+                  Read More
                 </Button>
                 <Modal open={openModalIndex === index} onClose={handleCloseModal} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
                   <Box sx={style}>
