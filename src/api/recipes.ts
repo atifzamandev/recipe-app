@@ -2,10 +2,21 @@ import { useQuery } from 'react-query'
 import axios from 'axios'
 import { RecipeProps } from '../types/recipe'
 
-const fetchRecipesData = async (query:string): Promise<RecipeProps> => {
+interface ApiParamsProps {
+  query: string
+  diet: string
+  health: string
+  cuisine: string
+}
+
+const fetchRecipesData = async ({query, diet,health, cuisine}:ApiParamsProps): Promise<RecipeProps> => {
+
+  //As a goog practice. These values should come from .env file but lets have them for test purpose.
+  const REACT_APP_API_BASE_URL="https://api.edamam.com/search"
+  const REACT_APP_API_ID="df53c267"
+  const REACT_APP_API_KEY="bd80595496a524a833554462aa41a04c"
   try {
- 
-    const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}?type=public&q=${query}&app_id=${process.env.REACT_APP_API_ID}&app_key=${process.env.REACT_APP_API_KEY}`)
+    const { data } = await axios.get(`${REACT_APP_API_BASE_URL}?&q=${query}&app_id=${REACT_APP_API_ID}&app_key=${REACT_APP_API_KEY}&from=0&to=20&calories=591-722&health=${health}&diet=${diet}&cuisineType=${cuisine}`)
 
     return data
   } catch (error) {
@@ -14,8 +25,9 @@ const fetchRecipesData = async (query:string): Promise<RecipeProps> => {
 }
 
 
-export const useRecipesData = (query: string) => {
-  return useQuery(['apiRecipe', query], () => fetchRecipesData(query), {
- 
+
+export const useRecipesData = ({query,diet, health, cuisine}: ApiParamsProps) => {
+  return useQuery(['apiRecipe', query, diet, health, cuisine], () => fetchRecipesData({query,diet, health, cuisine}), {
+    staleTime: 30000,
   })
 }

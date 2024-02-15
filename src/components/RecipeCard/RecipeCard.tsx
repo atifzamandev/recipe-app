@@ -65,18 +65,18 @@ const RecipeCard: React.FC<RecipeProps> = ({ hits }) => {
       <Grid container justifyContent='center' alignItems='center'>
         {hits?.map((recipe, index) => (
           <Grid item key={recipe.recipe.uri} xs={12} sm={6} md={4} lg={2} mb={3}>
-            <Card className={styles.card}>
+            <Card className={styles.card} >
               <CardHeader
                 avatar={
                   <Avatar sx={{ bgcolor: red[500] }}>
-                    <img alt={recipe.recipe.label} src={recipe.recipe.images.THUMBNAIL.url}></img>
+                    <img width="100" height="100" alt={recipe.recipe.label} src={recipe.recipe.image}></img>
                   </Avatar>
                 }
-                action={<IconButton onClick={() => handleBookmarkRecipe({ uri: recipe.recipe.uri, label: recipe.recipe.label, url: recipe.recipe.images.THUMBNAIL.url })}>{isBookmarked(recipe.recipe.uri) ? <FavoriteIcon sx={{ color: red[500] }} /> : <FavoriteBorderIcon sx={{ color: red[500] }} />}</IconButton>}
+                action={<IconButton onClick={() => handleBookmarkRecipe({ uri: recipe.recipe.uri, label: recipe.recipe.label, url: recipe.recipe.image})}>{isBookmarked(recipe.recipe.uri) ? <FavoriteIcon sx={{ color: red[500] }} /> : <FavoriteBorderIcon sx={{ color: red[500] }} />}</IconButton>}
                 title={recipe.recipe.label}
                 subheader={recipe.recipe.source}
               />
-              <CardMedia component='img' height='200' image={recipe.recipe.images.REGULAR.url} alt={recipe.recipe.label} />
+              <CardMedia component='img' height='200' image={recipe.recipe.image} alt={recipe.recipe.label} />
               <CardContent className=''>
                 <Typography align='left' variant='h6' mb={2}>
                   Recipe Information
@@ -84,9 +84,7 @@ const RecipeCard: React.FC<RecipeProps> = ({ hits }) => {
                 <Typography align='left'>Diet Labels: {recipe.recipe.dietLabels.join(', ')} </Typography>
                 <Typography align='left'>Calories: {recipe.recipe.calories} </Typography>
                 <Typography align='left'>Cuisine: {recipe.recipe.cuisineType} </Typography>
-                
               </CardContent>
-
               <CardActions disableSpacing>
                 <Button variant='contained' color='error' sx={{ margin: '0 auto', display: 'flex' }} onClick={() => handleOpenModal(index)}>
                   Check Ingredients
@@ -107,7 +105,6 @@ const RecipeCard: React.FC<RecipeProps> = ({ hits }) => {
                       {recipe.recipe.ingredients.map((ingredient) => (
                         <ListItem key={ingredient.foodId}> {ingredient.text}</ListItem>
                       ))}
-
                       <Typography align='left' mt={2}>Health Labels: {recipe.recipe.healthLabels.join(', ')} </Typography>
                     </List>
                   </Box>

@@ -8,9 +8,7 @@ import { Avatar, Drawer, IconButton, List, ListItem, ListItemAvatar, ListItemTex
 import DeleteIcon from '@mui/icons-material/Delete'
 
 import { red } from '@mui/material/colors'
-import { RecipeProps } from '../../types/recipe'
-
-const Header: React.FC<RecipeProps> = ({ hits }) => {
+const Header = () => {
   const [drawerOpen, setDrawerClose] = useState(false)
   const [recipesList, setRcipiesList] = useState<Array<{ uri: string; label: string; url: string }>>([])
 
@@ -25,14 +23,7 @@ const Header: React.FC<RecipeProps> = ({ hits }) => {
 
       setRcipiesList(parsedRecipes)
     }
-  }, [drawerOpen, recipesList])
-
-  /*   const getLabelForURI = (uri: string): string | undefined => {
-    const recipeData = hits?.find((hit: RecipeData) => hit.recipe.uri === uri);
-    return recipeData?.recipe.label;
-  }; 
-  {getLabelForURI(uri)}
-  */
+  }, [drawerOpen])
 
   const handleDeleteBookmark = (index: number) => {
     const updatedRecipesList = [...recipesList]
@@ -84,7 +75,7 @@ const Header: React.FC<RecipeProps> = ({ hits }) => {
                 backgroundColor: 'white',
                 '&:hover': {
                   backgroundColor: 'lightgray',
-                },
+                }
               }}
               variant='outlined'
               onClick={toggleDrawer}>
