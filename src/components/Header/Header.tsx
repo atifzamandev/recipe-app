@@ -4,13 +4,26 @@ import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-import { Avatar, Drawer, IconButton, List, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
+import {
+  Avatar,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+} from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
-
 import { red } from '@mui/material/colors'
+
+interface LocalStorageProp {
+  uri: string
+  label: string
+  url: string
+}
 const Header = () => {
   const [drawerOpen, setDrawerClose] = useState(false)
-  const [recipesList, setRcipiesList] = useState<Array<{ uri: string; label: string; url: string }>>([])
+  const [recipesList, setRcipiesList] = useState<Array<LocalStorageProp>>([])
 
   const toggleDrawer = () => {
     setDrawerClose(!drawerOpen)
@@ -19,7 +32,8 @@ const Header = () => {
   useEffect(() => {
     const savedRecipes = localStorage.getItem('bookmarkedRecipes')
     if (savedRecipes) {
-      const parsedRecipes: Array<{ uri: string; label: string; url: string }> = JSON.parse(savedRecipes)
+      const parsedRecipes: Array<{ uri: string; label: string; url: string }> =
+        JSON.parse(savedRecipes)
 
       setRcipiesList(parsedRecipes)
     }
@@ -40,7 +54,11 @@ const Header = () => {
     <>
       <div>
         <Drawer anchor='right' open={drawerOpen} onClose={toggleDrawer}>
-          <Button color='error' variant='contained' sx={{ margin: '10px' }} onClick={handleDeleteAll}>
+          <Button
+            color='error'
+            variant='contained'
+            sx={{ margin: '10px' }}
+            onClick={handleDeleteAll}>
             Delete All
           </Button>
           <List>
@@ -53,7 +71,10 @@ const Header = () => {
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText>{bookmark.label}</ListItemText>
-                  <IconButton edge='end' aria-label='delete' onClick={() => handleDeleteBookmark(index)}>
+                  <IconButton
+                    edge='end'
+                    aria-label='delete'
+                    onClick={() => handleDeleteBookmark(index)}>
                     <DeleteIcon />
                   </IconButton>
                 </ListItem>
@@ -75,7 +96,7 @@ const Header = () => {
                 backgroundColor: 'white',
                 '&:hover': {
                   backgroundColor: 'lightgray',
-                }
+                },
               }}
               variant='outlined'
               onClick={toggleDrawer}>

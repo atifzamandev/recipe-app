@@ -2,9 +2,8 @@
   margin: 24px;
 }
 
-.card{
-display: flex;
-flex-direction: column;
-margin: 10px;
+.card {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
 }
-
