@@ -1,0 +1,100 @@
+import { useEffect, useState } from 'react'
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
+import { Avatar, Drawer, IconButton, List, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
+
+import { red } from '@mui/material/colors'
+import { RecipeProps } from '../../types/recipe'
+
+const Header: React.FC<RecipeProps> = ({ hits }) => {
+  const [drawerOpen, setDrawerClose] = useState(false)
+  const [recipesList, setRcipiesList] = useState<Array<{ uri: string; label: string; url: string }>>([])
+
+  const toggleDrawer = () => {
+    setDrawerClose(!drawerOpen)
+  }
+
+  useEffect(() => {
+    const savedRecipes = localStorage.getItem('bookmarkedRecipes')
+    if (savedRecipes) {
+      const parsedRecipes: Array<{ uri: string; label: string; url: string }> = JSON.parse(savedRecipes)
+
+      setRcipiesList(parsedRecipes)
+    }
+  }, [drawerOpen, recipesList])
+
+  /*   const getLabelForURI = (uri: string): string | undefined => {
+    const recipeData = hits?.find((hit: RecipeData) => hit.recipe.uri === uri);
+    return recipeData?.recipe.label;
+  }; 
+  {getLabelForURI(uri)}
+  */
+
+  const handleDeleteBookmark = (index: number) => {
+    const updatedRecipesList = [...recipesList]
+    updatedRecipesList.splice(index, 1)
+    setRcipiesList(updatedRecipesList)
+    localStorage.setItem('bookmarkedRecipes', JSON.stringify(updatedRecipesList))
+  }
+  const handleDeleteAll = () => {
+    setRcipiesList([])
+    localStorage.setItem('bookmarkedRecipes', JSON.stringify([]))
+  }
+
+  return (
+    <>
+      <div>
+        <Drawer anchor='right' open={drawerOpen} onClose={toggleDrawer}>
+          <Button color='error' variant='contained' sx={{ margin: '10px' }} onClick={handleDeleteAll}>
+            Delete All
+          </Button>
+          <List>
+            {recipesList.map((bookmark, index) => (
+              <>
+                <ListItem key={bookmark.uri}>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <img alt={bookmark.label} src={bookmark.url}></img>
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText>{bookmark.label}</ListItemText>
+                  <IconButton edge='end' aria-label='delete' onClick={() => handleDeleteBookmark(index)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItem>
+              </>
+            ))}
+          </List>
+        </Drawer>
+      </div>
+
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position='relative' sx={{ bgcolor: red[900] }}>
+          <Toolbar>
+            <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+              Recipes Store
+            </Typography>
+            <Button
+              sx={{
+                color: red[900],
+                backgroundColor: 'white',
+                '&:hover': {
+                  backgroundColor: 'lightgray',
+                },
+              }}
+              variant='outlined'
+              onClick={toggleDrawer}>
+              Bookmark
+            </Button>
+          </Toolbar>
+        </AppBar>
+      </Box>
+    </>
+  )
+}
+
+export default Header
