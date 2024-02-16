@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   FormControl,
-  Grid,
   InputLabel,
   MenuItem,
   Select,
@@ -36,61 +35,59 @@ const SearchRecipes = ({
   handleCuisine,
 }: SearchProp) => {
   return (
-    <div>
-      <Grid item mb={5}>
-        <Box component='form' sx={{ display: 'flex', justifyContent: 'center' }}>
-          <TextField
-            variant='outlined'
-            label='Search Recipe'
-            size='small'
-            sx={{ mr: 2 }}
-            value={search}
-            onChange={handleSearch}
-            placeholder='Enter search query'
-          />
-          <Button
-            type='submit'
-            color='error'
-            variant='contained'
-            sx={{ pt: 1 }}
-            onClick={handleSubmit}>
-            Search
-          </Button>
-        </Box>
-        <Box component='form' mt={3}>
-          <FormControl size='small' sx={{ ml: 2 }}>
-            <InputLabel>Diet</InputLabel>
-            <Select value={diet} label='Diet Labels' onChange={handleDiet}>
-              {dietLabels.map((label) => (
-                <MenuItem key={label.value} value={label.value}>
-                  {label.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl size='small' sx={{ ml: 2 }}>
-            <InputLabel>Health</InputLabel>
-            <Select value={health} label='Health Labels' onChange={handleHealth}>
-              {healthLabels.map((health) => (
-                <MenuItem key={health.value} value={health.value}>
-                  {health.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl size='small' sx={{ ml: 2 }}>
-            <InputLabel>Cuisine</InputLabel>
-            <Select value={cuisine} label='Cuisine Type' onChange={handleCuisine}>
-              {cuisineType.map((cuisine) => (
-                <MenuItem key={cuisine.value} value={cuisine.value}>
-                  {cuisine.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-      </Grid>
-    </div>
+    <>
+      <Box component='form' sx={{ display: 'flex', justifyContent: 'center' }}>
+        <TextField
+          variant='outlined'
+          label='Search Recipe'
+          size='small'
+          sx={{ mr: 2 }}
+          value={search}
+          onChange={handleSearch}
+          placeholder='Enter search query'
+        />
+        <Button
+          type='submit'
+          color='error'
+          variant='contained'
+          sx={{ pt: 1 }}
+          onClick={handleSubmit}>
+          Search
+        </Button>
+      </Box>
+      <Box component='form' mt={3}>
+        <FormControl size='small' sx={{ ml: 2 }}>
+          <InputLabel>Diet</InputLabel>
+          <Select value={diet} label='Diet Labels' onChange={handleDiet}>
+            {dietLabels.map((label) => (
+              <MenuItem key={label.value} value={label.value}>
+                {label.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl size='small' sx={{ ml: 2 }}>
+          <InputLabel>Health</InputLabel>
+          <Select value={health} label='Health Labels' onChange={handleHealth}>
+            {healthLabels.map((health) => (
+              <MenuItem key={health.value} value={health.value}>
+                {health.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl size='small' sx={{ ml: 2 }}>
+          <InputLabel>Cuisine</InputLabel>
+          <Select value={cuisine} label='Cuisine Type' onChange={handleCuisine}>
+            {cuisineType.map((cuisine) => (
+              <MenuItem key={cuisine.value} value={cuisine.value}>
+                {cuisine.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+    </>
   )
 }
 

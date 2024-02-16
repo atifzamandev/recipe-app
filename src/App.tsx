@@ -24,9 +24,7 @@ function App() {
     to,
   })
 
-  const handleLoadMore = () => {
-    setTo(to + 10)
-  }
+
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value)
   }
@@ -44,6 +42,10 @@ function App() {
   }
   const handleCuisine = (e: SelectChangeEvent<string>) => {
     setCuisine(e.target.value as string)
+  }
+  
+  const handleLoadMore = () => {
+    setTo(to + 10)
   }
 
   if (isLoading) {
@@ -65,19 +67,25 @@ function App() {
     <>
       <Header />
       <Grid container direction='row' justifyContent='center' alignItems='center' my={5}>
-        <SearchRecipes
-          search={search}
-          diet={diet}
-          health={health}
-          cuisine={cuisine}
-          handleSearch={handleSearch}
-          handleSubmit={handleSubmit}
-          handleDiet={handleDiet}
-          handleHealth={handleHealth}
-          handleCuisine={handleCuisine}
-        />
-        <RecipeCard hits={data?.hits} />
-        <LoadMore handleLoadMore={handleLoadMore} />
+      <Grid item mb={5}>
+          <SearchRecipes
+            search={search}
+            diet={diet}
+            health={health}
+            cuisine={cuisine}
+            handleSearch={handleSearch}
+            handleSubmit={handleSubmit}
+            handleDiet={handleDiet}
+            handleHealth={handleHealth}
+            handleCuisine={handleCuisine}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <RecipeCard hits={data?.hits} />
+        </Grid>
+        <Grid item xs={3}>
+          <LoadMore handleLoadMore={handleLoadMore}/>
+        </Grid>
       </Grid>
     </>
   )

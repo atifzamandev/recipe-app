@@ -7,7 +7,6 @@ interface ApiParamsProps {
   diet: string
   health: string
   cuisine: string
-
   to: number
 }
 
@@ -18,7 +17,7 @@ const fetchRecipesData = async ({
   cuisine,
   to,
 }: ApiParamsProps): Promise<RecipeProps> => {
-  //As a goog practice. These values should come from .env file but lets have them for test purpose.
+  //As a good practice. These values should come from .env file but lets have them for test purpose.
   const REACT_APP_API_BASE_URL = 'https://api.edamam.com/search'
   const REACT_APP_API_ID = 'df53c267'
   const REACT_APP_API_KEY = 'bd80595496a524a833554462aa41a04c'

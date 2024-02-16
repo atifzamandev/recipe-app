@@ -27,6 +27,7 @@ const Header = () => {
 
   const toggleDrawer = () => {
     setDrawerClose(!drawerOpen)
+    
   }
 
   useEffect(() => {
@@ -54,13 +55,7 @@ const Header = () => {
     <>
       <div>
         <Drawer anchor='right' open={drawerOpen} onClose={toggleDrawer}>
-          <Button
-            color='error'
-            variant='contained'
-            sx={{ margin: '10px' }}
-            onClick={handleDeleteAll}>
-            Delete All
-          </Button>
+          <Typography variant='h6' my={2} mx={12}>Recipes Bookmarked</Typography>
           <List>
             {recipesList.map((bookmark, index) => (
               <>
@@ -81,10 +76,17 @@ const Header = () => {
               </>
             ))}
           </List>
+          <Button
+            color='error'
+            variant='contained'
+            sx={{ margin: '10px' }}
+            onClick={handleDeleteAll}>
+            Delete All
+          </Button>
         </Drawer>
       </div>
 
-      <Box sx={{ flexGrow: 1 }}>
+      <Box component='div' sx={{ flexGrow: 1 }}>
         <AppBar position='relative' sx={{ bgcolor: red[900] }}>
           <Toolbar>
             <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
@@ -96,7 +98,7 @@ const Header = () => {
                 backgroundColor: 'white',
                 '&:hover': {
                   backgroundColor: 'lightgray',
-                },
+                }
               }}
               variant='outlined'
               onClick={toggleDrawer}>
