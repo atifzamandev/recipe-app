@@ -38,6 +38,7 @@ const SearchRecipes = ({
     <>
       <Box component='form' sx={{ display: 'flex', justifyContent: 'center' }}>
         <TextField
+          data-cy-query='cy-query'
           variant='outlined'
           label='Search Recipe'
           size='small'
@@ -50,6 +51,7 @@ const SearchRecipes = ({
           type='submit'
           color='error'
           variant='contained'
+          data-cy-search='cy-search'
           sx={{ pt: 1 }}
           onClick={handleSubmit}>
           Search
@@ -58,19 +60,29 @@ const SearchRecipes = ({
       <Box component='form' mt={3}>
         <FormControl size='small' sx={{ ml: 2 }}>
           <InputLabel>Diet</InputLabel>
-          <Select value={diet} label='Diet Labels' onChange={handleDiet}>
-            {dietLabels.map((label) => (
-              <MenuItem key={label.value} value={label.value}>
-                {label.label}
+          <Select data-cy-diet='cy-diet' value={diet} label='Diet Labels' onChange={handleDiet}>
+            {dietLabels.map((diet) => (
+              <MenuItem
+                data-cy-diet-option={`cy-diet-option-${diet.value}`}
+                key={diet.value}
+                value={diet.value}>
+                {diet.label}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
         <FormControl size='small' sx={{ ml: 2 }}>
           <InputLabel>Health</InputLabel>
-          <Select value={health} label='Health Labels' onChange={handleHealth}>
+          <Select
+            data-cy-health='cy-health'
+            value={health}
+            label='Health Labels'
+            onChange={handleHealth}>
             {healthLabels.map((health) => (
-              <MenuItem key={health.value} value={health.value}>
+              <MenuItem
+                data-cy-health-option={`cy-health-option-${health.value}`}
+                key={health.value}
+                value={health.value}>
                 {health.label}
               </MenuItem>
             ))}
@@ -78,9 +90,16 @@ const SearchRecipes = ({
         </FormControl>
         <FormControl size='small' sx={{ ml: 2 }}>
           <InputLabel>Cuisine</InputLabel>
-          <Select value={cuisine} label='Cuisine Type' onChange={handleCuisine}>
+          <Select
+            data-cy-cuisine='cy-cuisine'
+            value={cuisine}
+            label='Cuisine Type'
+            onChange={handleCuisine}>
             {cuisineType.map((cuisine) => (
-              <MenuItem key={cuisine.value} value={cuisine.value}>
+              <MenuItem
+                data-cy-cuisine-option={`cy-cuisine-option-${cuisine.value}`}
+                key={cuisine.value}
+                value={cuisine.value}>
                 {cuisine.label}
               </MenuItem>
             ))}

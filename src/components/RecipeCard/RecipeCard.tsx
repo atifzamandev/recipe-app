@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   Avatar,
   Box,
@@ -20,7 +20,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import CloseIcon from '@mui/icons-material/Close'
 import { red } from '@mui/material/colors'
 import styles from './RecipeCard.module.css'
-import { RecipeProps } from '../../types/recipe'
+import { LocalStorageProps, RecipeData } from '../../types/recipe'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -34,14 +34,14 @@ const style = {
   p: 4,
 }
 
-const RecipeCard: React.FC<RecipeProps> = ({ hits }) => {
+interface Props {
+  hits: RecipeData[] | undefined
+  handleBookmarkRecipe: ({ uri, label, image }: LocalStorageProps) => void
+  isBookmarked: (uri: string) => boolean
+}
+
+const RecipeCard: React.FC<Props> = ({ hits, handleBookmarkRecipe, isBookmarked }) => {
   const [openModalIndex, setOpenModalIndex] = useState<number | null>(null)
-  const [bookmarkedRecipes, setBookmarkedRecipes] = useState<
-    Array<{ uri: string; label: string; url: string }>
-  >(() => {
-    const storedRecipes = localStorage.getItem('bookmarkedRecipes')
-    return storedRecipes ? JSON.parse(storedRecipes) : []
-  })
 
   const handleOpenModal = (index: number) => {
     setOpenModalIndex(index)
@@ -50,35 +50,6 @@ const RecipeCard: React.FC<RecipeProps> = ({ hits }) => {
   const handleCloseModal = () => {
     setOpenModalIndex(null)
   }
-
-  const isBookmarked = (uri: string) => {
-    return bookmarkedRecipes.some((recipe) => recipe.uri === uri)
-  }
-
-  const handleBookmarkRecipe = (recipe: { uri: string; label: string; url: string }) => {
-    const isAlreadyBookmarked = isBookmarked(recipe.uri)
-
-    if (isAlreadyBookmarked) {
-      const updatedBookmarkedRecipes = bookmarkedRecipes.filter(
-        (bookmarkRecipe) => bookmarkRecipe.uri !== recipe.uri
-      )
-      setBookmarkedRecipes(updatedBookmarkedRecipes)
-      localStorage.setItem('bookmarkedRecipes', JSON.stringify(updatedBookmarkedRecipes))
-    } else {
-      const updatedBookmarkedRecipes = [...bookmarkedRecipes, recipe]
-      setBookmarkedRecipes(updatedBookmarkedRecipes)
-      localStorage.setItem('bookmarkedRecipes', JSON.stringify(updatedBookmarkedRecipes))
-    }
-  }
-
-  useEffect(() => {
-    const storedRecipe = localStorage.getItem('bookmarkedRecipes')
-    if (storedRecipe) {
-      const parsedRecipes: Array<{ uri: string; label: string; url: string }> =
-        JSON.parse(storedRecipe)
-      setBookmarkedRecipes(parsedRecipes)
-    }
-  }, [])
 
   return (
     <div className={styles.container}>
@@ -102,7 +73,7 @@ const RecipeCard: React.FC<RecipeProps> = ({ hits }) => {
                       handleBookmarkRecipe({
                         uri: recipe.recipe.uri,
                         label: recipe.recipe.label,
-                        url: recipe.recipe.image,
+                        image: recipe.recipe.image,
                       })
                     }>
                     {isBookmarked(recipe.recipe.uri) ? (

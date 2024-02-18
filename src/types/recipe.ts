@@ -30,3 +30,9 @@ interface Ingredients {
   foodId: string
   image: string
 }
+
+export interface LocalStorageProps {
+  uri: string
+  label: string
+  image: string
+}

@@ -11,6 +11,7 @@ const LoadMore: React.FC<Prop> = ({ handleLoadMore }) => {
     <>
       <Button
         fullWidth
+        data-cy-load='cy-loadMore'
         variant='outlined'
         color='error'
         sx={{
