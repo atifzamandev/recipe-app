@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import CloseIcon from '@mui/icons-material/Close'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import {
   Avatar,
   Box,
@@ -15,12 +17,11 @@ import {
   Modal,
   Typography,
 } from '@mui/material'
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import CloseIcon from '@mui/icons-material/Close'
 import { red } from '@mui/material/colors'
+import { useState } from 'react'
+import { useLocalContext } from '../../contexts/LocalContext'
+import { useRecipesContext } from '../../contexts/RecipeContext'
 import styles from './RecipeCard.module.css'
-import { LocalStorageProps, RecipeData } from '../../types/recipe'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -34,14 +35,10 @@ const style = {
   p: 4,
 }
 
-interface Props {
-  hits: RecipeData[] | undefined
-  handleBookmarkRecipe: ({ uri, label, image }: LocalStorageProps) => void
-  isBookmarked: (uri: string) => boolean
-}
-
-const RecipeCard: React.FC<Props> = ({ hits, handleBookmarkRecipe, isBookmarked }) => {
+const RecipeCard = () => {
   const [openModalIndex, setOpenModalIndex] = useState<number | null>(null)
+  const { isBookmarked, handleBookmarkRecipe } = useLocalContext()
+  const { data } = useRecipesContext()
 
   const handleOpenModal = (index: number) => {
     setOpenModalIndex(index)
@@ -54,7 +51,7 @@ const RecipeCard: React.FC<Props> = ({ hits, handleBookmarkRecipe, isBookmarked 
   return (
     <div className={styles.container}>
       <Grid container justifyContent='center' alignItems='center'>
-        {hits?.map((recipe, index) => (
+        {data?.map((recipe, index) => (
           <Grid item key={recipe.recipe.uri} xs={12} sm={6} md={4} lg={2} mb={3}>
             <Card className={styles.card}>
               <CardHeader

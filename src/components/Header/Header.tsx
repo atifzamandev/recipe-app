@@ -1,10 +1,5 @@
-import React, { useState } from 'react'
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
 import CloseIcon from '@mui/icons-material/Close'
+import DeleteIcon from '@mui/icons-material/Delete'
 import {
   Avatar,
   Drawer,
@@ -14,17 +9,17 @@ import {
   ListItemAvatar,
   ListItemText,
 } from '@mui/material'
-import DeleteIcon from '@mui/icons-material/Delete'
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
 import { red } from '@mui/material/colors'
-import { LocalStorageProps } from '../../types/recipe'
+import { useState } from 'react'
+import { useLocalContext } from '../../contexts/LocalContext'
 
-interface Props {
-  recipesList: LocalStorageProps[]
-  handleDeleteBookmark: (index: number) => void
-  handleDeleteAll: () => void
-}
-
-const Header: React.FC<Props> = ({ recipesList, handleDeleteBookmark, handleDeleteAll }) => {
+const Header = () => {
+  const { bookmarkedRecipes, handleDeleteAll, handleDeleteBookmark } = useLocalContext()
   const [drawerOpen, setDrawerClose] = useState(false)
 
   const toggleDrawer = () => {
@@ -54,7 +49,9 @@ const Header: React.FC<Props> = ({ recipesList, handleDeleteBookmark, handleDele
               data-cy-bookmrk='cy-bookmark'
               variant='outlined'
               onClick={toggleDrawer}>
-              Bookmark
+              {bookmarkedRecipes.length < 1
+                ? 'Book Mark'
+                : `Book Marked ${bookmarkedRecipes.length}`}
             </Button>
           </Toolbar>
         </AppBar>
@@ -63,7 +60,7 @@ const Header: React.FC<Props> = ({ recipesList, handleDeleteBookmark, handleDele
       <div>
         <Drawer anchor='right' open={drawerOpen} onClose={toggleDrawer}>
           <Typography variant='h6' my={2} mx={12}>
-            Recipes Bookmarked
+            {bookmarkedRecipes.length < 1 ? 'No Recipes Bookmarked' : `Recipes Bookmarked`}
           </Typography>
           <IconButton
             onClick={toggleDrawer}
@@ -76,7 +73,7 @@ const Header: React.FC<Props> = ({ recipesList, handleDeleteBookmark, handleDele
             <CloseIcon />
           </IconButton>
           <List>
-            {recipesList.map((bookmark, index) => (
+            {bookmarkedRecipes.map((bookmark, index) => (
               <>
                 <ListItem key={bookmark.uri}>
                   <ListItemAvatar>
@@ -95,13 +92,15 @@ const Header: React.FC<Props> = ({ recipesList, handleDeleteBookmark, handleDele
               </>
             ))}
           </List>
-          <Button
-            color='error'
-            variant='contained'
-            sx={{ margin: '10px' }}
-            onClick={handleDeleteAll}>
-            Delete All
-          </Button>
+          {bookmarkedRecipes.length > 0 && (
+            <Button
+              color='error'
+              variant='contained'
+              sx={{ margin: '10px' }}
+              onClick={handleDeleteAll}>
+              Delete All
+            </Button>
+          )}
         </Drawer>
       </div>
     </>

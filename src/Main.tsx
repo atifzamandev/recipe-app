@@ -1,94 +1,40 @@
-import { ChangeEvent, useEffect, useState } from 'react'
-import styles from './Main.module.css'
-import RecipeCard from './components/RecipeCard/RecipeCard'
 import { Box, CircularProgress, Grid, SelectChangeEvent } from '@mui/material'
-import { useRecipesData } from './api/recipes'
 import { red } from '@mui/material/colors'
+import { ChangeEvent } from 'react'
+import styles from './Main.module.css'
 import Header from './components/Header/Header'
-import SearchRecipes from './components/Search/SearchRecipes'
 import LoadMore from './components/LoadMore/LoadMore'
-import { LocalStorageProps } from './types/recipe'
+import RecipeCard from './components/RecipeCard/RecipeCard'
+import SearchRecipes from './components/Search/SearchRecipes'
+import { useRecipesContext } from './contexts/RecipeContext'
 
 const Main = () => {
-  const [bookmarkedRecipes, setBookmarkedRecipes] = useState<Array<LocalStorageProps>>(() => {
-    const storedRecipes = localStorage.getItem('bookmarkedRecipes')
-    return storedRecipes ? JSON.parse(storedRecipes) : []
-  })
-  const [search, setSearch] = useState<string>('')
-  const [query, setQuery] = useState<string>('chicken')
-  const [diet, setDiet] = useState<string>('balanced')
-  const [health, setHealth] = useState<string>('alcohol-free')
-  const [cuisine, setCuisine] = useState<string>('indian')
-  const [to, setTo] = useState(10)
-
-  const { data, isLoading, error, refetch } = useRecipesData({
-    query,
-    diet,
-    health,
-    cuisine,
-    to,
-  })
+  const { searchApiParams, setSearchApiParams, data, isLoading, refetch, error } =
+    useRecipesContext()
+  const { search, diet, health, cuisine } = searchApiParams
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value)
+    setSearchApiParams({ ...searchApiParams, search: e.target.value })
   }
   const handleSubmit = (e: React.MouseEvent) => {
     e.preventDefault()
-    setQuery(search)
+    setSearchApiParams({ ...searchApiParams, query: search })
     refetch()
   }
   const handleDiet = (e: SelectChangeEvent<string>) => {
-    setDiet(e.target.value as string)
+    setSearchApiParams({ ...searchApiParams, diet: e.target.value as string })
   }
 
   const handleHealth = (e: SelectChangeEvent<string>) => {
-    setHealth(e.target.value as string)
+    setSearchApiParams({ ...searchApiParams, health: e.target.value as string })
   }
   const handleCuisine = (e: SelectChangeEvent<string>) => {
-    setCuisine(e.target.value as string)
+    setSearchApiParams({ ...searchApiParams, cuisine: e.target.value as string })
   }
 
   const handleLoadMore = () => {
-    setTo(to + 10)
+    setSearchApiParams((prevParams) => ({ ...prevParams, to: prevParams.to + 10 }))
   }
-
-  const isBookmarked = (uri: string) => {
-    return bookmarkedRecipes.some((recipe) => recipe.uri === uri)
-  }
-  const handleBookmarkRecipe = (recipe: LocalStorageProps) => {
-    const isAlreadyBookmarked = isBookmarked(recipe.uri)
-
-    if (isAlreadyBookmarked) {
-      const updatedBookmarkedRecipes = bookmarkedRecipes.filter(
-        (bookmarkRecipe) => bookmarkRecipe.uri !== recipe.uri
-      )
-      setBookmarkedRecipes(updatedBookmarkedRecipes)
-      localStorage.setItem('bookmarkedRecipes', JSON.stringify(updatedBookmarkedRecipes))
-    } else {
-      const updatedBookmarkedRecipes = [...bookmarkedRecipes, recipe]
-      setBookmarkedRecipes(updatedBookmarkedRecipes)
-      localStorage.setItem('bookmarkedRecipes', JSON.stringify(updatedBookmarkedRecipes))
-    }
-  }
-
-  const handleDeleteBookmark = (index: number) => {
-    const updatedRecipesList = [...bookmarkedRecipes]
-    updatedRecipesList.splice(index, 1)
-    setBookmarkedRecipes(updatedRecipesList)
-    localStorage.setItem('bookmarkedRecipes', JSON.stringify(updatedRecipesList))
-  }
-  const handleDeleteAll = () => {
-    setBookmarkedRecipes([])
-    localStorage.setItem('bookmarkedRecipes', JSON.stringify([]))
-  }
-
-  useEffect(() => {
-    const storedRecipe = localStorage.getItem('bookmarkedRecipes')
-    if (storedRecipe) {
-      const parsedRecipes: Array<LocalStorageProps> = JSON.parse(storedRecipe)
-      setBookmarkedRecipes(parsedRecipes)
-    }
-  }, [bookmarkedRecipes])
 
   if (isLoading) {
     return (
@@ -107,11 +53,7 @@ const Main = () => {
 
   return (
     <>
-      <Header
-        recipesList={bookmarkedRecipes}
-        handleDeleteBookmark={handleDeleteBookmark}
-        handleDeleteAll={handleDeleteAll}
-      />
+      <Header />
       <Grid container direction='row' justifyContent='center' alignItems='center' my={5}>
         <Grid item mb={5}>
           <SearchRecipes
@@ -127,14 +69,10 @@ const Main = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <RecipeCard
-            hits={data?.hits}
-            isBookmarked={isBookmarked}
-            handleBookmarkRecipe={handleBookmarkRecipe}
-          />
+          <RecipeCard />
         </Grid>
         <Grid item xs={3}>
-          {data?.hits && data.hits.length > 0 && <LoadMore handleLoadMore={handleLoadMore} />}
+          {data && data.length > 0 && <LoadMore handleLoadMore={handleLoadMore} />}
         </Grid>
       </Grid>
     </>
